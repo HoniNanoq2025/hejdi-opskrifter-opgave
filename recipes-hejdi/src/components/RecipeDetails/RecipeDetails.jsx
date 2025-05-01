@@ -30,19 +30,21 @@ export default function RecipeDetail() {
       <div className={styles.headerImg}>
         <img src={recipe.image} alt={recipe.name} height={600} />
       </div>
-      <div className={styles.details}>
-        <div className={styles.time}>
-          <h5>Servings: {recipe.servings}</h5>
-          <h5>Preparation time: {recipe.prepTimeMinutes}</h5>
-          <h5>Cooking time: {recipe.cookTimeMinutes}</h5>
-        </div>
-        <div className={styles.info}>
-          <h5>Difficulty: {recipe.difficulty}</h5>
-          <h5>Meal type: {recipe.mealType}</h5>
-          <h5>Cuisine: {recipe.cuisine}</h5>
-        </div>
-        <div className={styles.calories}>
-          <h5>Calories per serving: {recipe.caloriesPerServing} kcal</h5>
+      <div className={styles.center}>
+        <div className={styles.details}>
+          <div className={styles.time}>
+            <h5>Servings: {recipe.servings}</h5>
+            <h5>Preparation time: {recipe.prepTimeMinutes}</h5>
+            <h5>Cooking time: {recipe.cookTimeMinutes}</h5>
+          </div>
+          <div className={styles.info}>
+            <h5>Difficulty: {recipe.difficulty}</h5>
+            <h5>Meal type: {recipe.mealType}</h5>
+            <h5>Cuisine: {recipe.cuisine}</h5>
+          </div>
+          <div className={styles.calories}>
+            <h5>Calories per serving: {recipe.caloriesPerServing} kcal</h5>
+          </div>
         </div>
       </div>
       <div className={styles.instructions}>

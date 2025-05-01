@@ -23,8 +23,16 @@
   margin-bottom: 20px;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .details {
   max-width: 600px;
+  width: 100%;
   background-color: rgb(231, 179, 47);
   padding: 20px;
   border-radius: 18px;
@@ -79,4 +87,18 @@ h4 {
   background: yellowgreen;
   padding: 0 30px;
   border-radius: 18px;
+}
+
+/* responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .instructions {
+    flex-direction: column;
+  }
+
+  .ingredients,
+  .prep {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
