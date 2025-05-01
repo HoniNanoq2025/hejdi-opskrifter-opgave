@@ -27,7 +27,25 @@ export default function RecipeDetail() {
       <div className={styles.headerTitle}>
         <h2>{recipe.name}</h2>
       </div>
-      <div className={styles.detailHeader}>
+      <div className={styles.headerImg}>
+        <img src={recipe.image} alt={recipe.name} height={600} />
+      </div>
+      <div className={styles.details}>
+        <div className={styles.time}>
+          <h5>Servings: {recipe.servings}</h5>
+          <h5>Preparation time: {recipe.prepTimeMinutes}</h5>
+          <h5>Cooking time: {recipe.cookTimeMinutes}</h5>
+        </div>
+        <div className={styles.info}>
+          <h5>Difficulty: {recipe.difficulty}</h5>
+          <h5>Meal type: {recipe.mealType}</h5>
+          <h5>Cuisine: {recipe.cuisine}</h5>
+        </div>
+        <div className={styles.calories}>
+          <h5>Calories per serving: {recipe.caloriesPerServing} kcal</h5>
+        </div>
+      </div>
+      <div className={styles.instructions}>
         <div className={styles.ingredients}>
           <h4>Ingredienser</h4>
           <ul>
@@ -36,11 +54,10 @@ export default function RecipeDetail() {
             ))}
           </ul>
         </div>
-        <img src={recipe.image} alt={recipe.name} />
-      </div>
-      <div className={styles.instructions}>
-        <h4>Fremgangsmåde</h4>
-        <p>{recipe.instructions}</p>
+        <div className={styles.prep}>
+          <h4>Fremgangsmåde</h4>
+          <p>{recipe.instructions}</p>
+        </div>
       </div>
     </div>
   );

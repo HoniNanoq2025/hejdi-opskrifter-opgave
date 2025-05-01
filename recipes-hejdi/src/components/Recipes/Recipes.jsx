@@ -66,10 +66,14 @@ export default function Recipes() {
         <div className={styles.item} key={recipe.id}>
           <div className={styles.card}>
             <img src={recipe.image} alt={recipe.name} height={200} />
-            <h5 className={styles.cardContent}>{recipe.name}</h5>
+            <h5 className={styles.cardTitle}>{recipe.name}</h5>
+            <div className={styles.rating}>
+              <h6>{recipe.reviewCount} reviews</h6>
+              <h6>Rating: {recipe.rating}</h6>
+            </div>
             <div className={styles.buttons}>
               <button onClick={() => navigate(`/recipe/${recipe.id}`)}>
-                Læs mere
+                Read more
               </button>
               <button
                 className={`${styles.likeBtn} ${

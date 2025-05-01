@@ -20,9 +20,14 @@
   gap: 10px;
 }
 
-.cardContent {
+.cardTitle {
   font-family: "Poppins", sans-serif;
   color: #333;
+}
+
+.rating{
+  color: gray;
+  text-align: center;
 }
 
 .buttons {

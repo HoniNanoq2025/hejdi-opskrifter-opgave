@@ -17,15 +17,37 @@
   margin-bottom: 20px;
 }
 
-.detailHeader {
+.headerImg {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.ingredients {
-  width: 33%;
-  margin-left: 10%;
-  margin-top: 10%;
+.details {
+  max-width: 600px;
+  background-color: rgb(231, 179, 47);
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.time,
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.time > h5 {
+  font-weight: 900;
+}
+
+.info > h5 {
+  font-weight: 900;
+}
+
+.calories > h5 {
+  font-weight: 300;
 }
 
 ul {
@@ -33,10 +55,28 @@ ul {
   margin-top: 5px;
 }
 
-img {
-  height: 500px;
+.instructions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
-.instructions {
-  padding: 25px;
+h4 {
+  padding: 30px 0 20px;
+}
+
+.ingredients {
+  width: 33%;
+  padding-left: 10%;
+  background: white;
+  padding-bottom: 30px;
+  border-radius: 18px;
+}
+
+.prep {
+  width: 69%;
+  background: yellowgreen;
+  padding: 0 30px;
+  border-radius: 18px;
 }
