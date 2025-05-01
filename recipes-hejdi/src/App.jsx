@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import styles from "./App.module.css";
 import Recipes from "./components/Recipes/Recipes";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
+import styles from "./App.module.css";
 
 export default function App() {
   return (
