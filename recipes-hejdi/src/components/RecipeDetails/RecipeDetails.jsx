@@ -24,16 +24,24 @@ export default function RecipeDetail() {
 
   return (
     <div className={styles.recipeDetail}>
-      <h2>{recipe.name}</h2>
-      <img src={recipe.image} alt={recipe.name} />
-      <h4>Ingredienser</h4>
-      <ul>
-        {recipe.ingredients.map((item, i) => (
-          <li key={i}>{item}</li>
-        ))}
-      </ul>
-      <h4>Fremgangsmåde</h4>
-      <p>{recipe.instructions}</p>
+      <div className={styles.headerTitle}>
+        <h2>{recipe.name}</h2>
+      </div>
+      <div className={styles.detailHeader}>
+        <div className={styles.ingredients}>
+          <h4>Ingredienser</h4>
+          <ul>
+            {recipe.ingredients.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <img src={recipe.image} alt={recipe.name} />
+      </div>
+      <div className={styles.instructions}>
+        <h4>Fremgangsmåde</h4>
+        <p>{recipe.instructions}</p>
+      </div>
     </div>
   );
 }
