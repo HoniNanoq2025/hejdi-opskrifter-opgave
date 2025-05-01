@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Recipes.module.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState([]);
+  const [likedRecipes, setLikedRecipes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +22,44 @@ export default function Recipes() {
     fetchRecipes();
   }, []);
 
+  useEffect(() => {
+    try {
+      const storedLikes = localStorage.getItem("likedRecipes");
+      if (storedLikes) {
+        setLikedRecipes(JSON.parse(storedLikes));
+      }
+    } catch (error) {
+      console.error("Fejl ved indlæsning af opskrifter:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (likedRecipes.length > 0) {
+        localStorage.setItem("likedRecipes", JSON.stringify(likedRecipes));
+      } else if (
+        likedRecipes.length === 0 &&
+        localStorage.getItem("likedRecipes")
+      ) {
+        localStorage.setItem("likedRecipes", JSON.stringify([]));
+      }
+    } catch (error) {
+      console.error("Fejl da du gemte opskrifterne:", error);
+    }
+  }, [likedRecipes]);
+
+  const toggleLike = (recipeId) => {
+    if (likedRecipes.includes(recipeId)) {
+      setLikedRecipes(likedRecipes.filter((id) => id !== recipeId));
+    } else {
+      setLikedRecipes([...likedRecipes, recipeId]);
+    }
+  };
+
+  const isLiked = (recipeId) => {
+    return likedRecipes.includes(recipeId);
+  };
+
   return (
     <div className={styles.cardContainer}>
       {recipes.map((recipe) => (
@@ -27,9 +67,17 @@ export default function Recipes() {
           <div className={styles.card}>
             <img src={recipe.image} alt={recipe.name} height={200} />
             <h5 className={styles.cardContent}>{recipe.name}</h5>
-            <button onClick={() => navigate(`/recipe/${recipe.id}`)}>
-              Læs mere
-            </button>
+            <div className={styles.buttons}>
+              <button onClick={() => navigate(`/recipe/${recipe.id}`)}>
+                Læs mere
+              </button>
+              <button
+                className={`${styles.likeBtn} ${
+                  isLiked(recipe.id) ? styles.liked : ""
+                }`}
+                onClick={() => toggleLike(recipe.id)}
+              />
+            </div>
           </div>
         </div>
       ))}

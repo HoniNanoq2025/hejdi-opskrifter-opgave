@@ -5,6 +5,7 @@
 }
 
 .app {
+  display: block;
   width: 100vw;
   min-height: 100vh;
 }
@@ -25,9 +26,12 @@
   color: purple;
 }
 
-.container{
+.container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   width: 100vw;
+  padding: 40px;
 }
