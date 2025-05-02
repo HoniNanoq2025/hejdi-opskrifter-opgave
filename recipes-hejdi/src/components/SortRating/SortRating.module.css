@@ -1,0 +1,34 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+.sortButton {
+  font-family: "Poppins";
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px;
+  background-color: antiquewhite;
+  border: 1px solid antiquewhite;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+/* .sortButton:hover {
+  background-color: #e9e9e9;
+} */
+
+.sortButton.active {
+  background-color: #e0f7fa;
+  border-color: #80deea;
+  font-weight: bold;
+}
+
+.sortButton i {
+  font-size: 16px;
+  color: #666;
+}
+
+.sortButton.active i {
+  color: #00acc1;
+}

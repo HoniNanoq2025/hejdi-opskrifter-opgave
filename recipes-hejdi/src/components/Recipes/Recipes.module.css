@@ -25,7 +25,7 @@
   color: #333;
 }
 
-.rating{
+.rating {
   color: gray;
   text-align: center;
 }
@@ -55,4 +55,11 @@ button {
 .likeBtn.liked::before {
   font-weight: 900; /* helfarvet hjerte */
   color: red;
+}
+
+.filtering {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-right: 4%;
 }

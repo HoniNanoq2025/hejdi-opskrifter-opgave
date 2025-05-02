@@ -4,6 +4,7 @@ import styles from "./Recipes.module.css";
 import Filter from "../Filter/Filter";
 import Search from "../Search/Search";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import SortRating from "../SortRating/SortRating";
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState([]);
@@ -13,6 +14,7 @@ export default function Recipes() {
   // Add state for filter values
   const [filterType, setFilterType] = useState("mealType");
   const [filterValue, setFilterValue] = useState("");
+  const [sortDirection, setSortDirection] = useState(""); // "" for at vise uden sortering
   const navigate = useNavigate();
 
   // Fetch recipes from the API
@@ -79,15 +81,26 @@ export default function Recipes() {
       });
     }
 
-    // Apply search term filter
+    // Søgefilter
     if (searchTerm) {
       filtered = filtered.filter((recipe) =>
         recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
+    //Sorterings filter
+    if (sortDirection) {
+      filtered.sort((a, b) => {
+        if (sortDirection === "asc") {
+          return a.rating - b.rating; // Lav til Høj rating
+        } else {
+          return b.rating - a.rating; // Høj til Lav rating
+        }
+      });
+    }
+
     setFilteredRecipes(filtered);
-  }, [recipes, searchTerm, filterType, filterValue]);
+  }, [recipes, searchTerm, filterType, filterValue, sortDirection]);
 
   const toggleLike = (recipeId) => {
     if (likedRecipes.includes(recipeId)) {
@@ -110,19 +123,36 @@ export default function Recipes() {
     setFilterValue(newFilterValue);
   };
 
+  const handleSortChange = (direction) => {
+    setSortDirection(direction);
+  };
+
   return (
     <div>
-      <Search setSearchTerm={setSearchTerm} />
+      <div className={styles.searchBar}>
+        <Search setSearchTerm={setSearchTerm} />
+      </div>
 
-      {/* Updated Filter component props */}
-      <Filter
-        recipes={recipes}
-        filterType={filterType}
-        filterValue={filterValue}
-        onFilterTypeChange={handleFilterTypeChange}
-        onFilterValueChange={handleFilterValueChange}
-      />
+      <div className={styles.filtering}>
+        {/* Updated Filter component props */}
+        <div className={styles.filter}>
+          <Filter
+            recipes={recipes}
+            filterType={filterType}
+            filterValue={filterValue}
+            onFilterTypeChange={handleFilterTypeChange}
+            onFilterValueChange={handleFilterValueChange}
+          />
+        </div>
 
+        <div className={styles.sorting}>
+          {/* Add the sort button component */}
+          <SortRating
+            sortDirection={sortDirection}
+            onSortChange={handleSortChange}
+          />
+        </div>
+      </div>
       <div className={styles.cardContainer}>
         {/* Render filtered recipes */}
         {filteredRecipes.map((recipe) => (
