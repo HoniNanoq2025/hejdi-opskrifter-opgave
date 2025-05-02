@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
+import styles from "./Filter.module.css";
 
 function Filter({ recipes, onFilterChange }) {
   const [filterType, setFilterType] = useState("mealType"); // Default filter type
   const [filterValue, setFilterValue] = useState(""); // Default filter value
 
-  // Get unique filter values (mealType or cuisine) based on the selected filter type
+  // Get unique filter values (mealType or cuisine)
   const filterOptions = Array.from(
-    new Set(recipes.map((recipe) => recipe[filterType]))
+    new Set(
+      recipes.flatMap((recipe) =>
+        Array.isArray(recipe[filterType])
+          ? recipe[filterType]
+          : [recipe[filterType]]
+      )
+    )
   );
 
   // Update the filter value and notify the parent (Recipes.jsx) of the change
@@ -15,8 +22,8 @@ function Filter({ recipes, onFilterChange }) {
   }, [filterType, filterValue, onFilterChange]);
 
   return (
-    <div>
-      <div>
+    <div className={styles.filter}>
+      <div className={styles.dropDown}>
         {/* Dropdown to select filter type */}
         <select
           onChange={(e) => setFilterType(e.target.value)}
