@@ -33,13 +33,18 @@ export default function RecipeDetail() {
       <div className={styles.center}>
         <div className={styles.details}>
           <div className={styles.time}>
-            <h5>Servings: {recipe.servings}</h5>
-            <h5>Preparation time: {recipe.prepTimeMinutes}</h5>
-            <h5>Cooking time: {recipe.cookTimeMinutes}</h5>
+            <h5>Servings: {recipe.servings} pers.</h5>
+            <h5>Preparation time: {recipe.prepTimeMinutes} min.</h5>
+            <h5>Cooking time: {recipe.cookTimeMinutes} min.</h5>
           </div>
           <div className={styles.info}>
             <h5>Difficulty: {recipe.difficulty}</h5>
-            <h5>Meal type: {recipe.mealType}</h5>
+            <h5>
+              Meal type:{" "}
+              {Array.isArray(recipe.mealType)
+                ? recipe.mealType.join(", ")
+                : recipe.mealType}
+            </h5>
             <h5>Cuisine: {recipe.cuisine}</h5>
           </div>
           <div className={styles.calories}>
