@@ -77,7 +77,7 @@ export default function RecipeDetail() {
         </div>
         <div className={styles.prep}>
           <h4>Fremgangsmåde</h4>
-          <p>
+          <div>
             {Array.isArray(recipe.instructions) ? (
               <ul>
                 {recipe.instructions.map((step, index) => (
@@ -87,7 +87,7 @@ export default function RecipeDetail() {
             ) : (
               <p>{recipe.instructions}</p>
             )}
-          </p>
+          </div>
         </div>
       </div>
     </div>

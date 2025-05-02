@@ -1,54 +1,43 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import styles from "./Filter.module.css";
 
-function Filter({ recipes, onFilterChange }) {
-  const [filterType, setFilterType] = useState("mealType"); // Default filter type
-  const [filterValue, setFilterValue] = useState(""); // Default filter value
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // Get unique filter values (mealType or cuisine)
-  const filterOptions = Array.from(
-    new Set(
-      recipes.flatMap((recipe) =>
-        Array.isArray(recipe[filterType])
-          ? recipe[filterType]
-          : [recipe[filterType]]
+function Filter({
+  recipes,
+  filterType,
+  filterValue,
+  onFilterTypeChange,
+  onFilterValueChange,
+}) {
+  // Calculate available filter options based on selected filter type
+  // Use useMemo to avoid recalculating on every render
+  const filterOptions = useMemo(() => {
+    return Array.from(
+      new Set(
+        recipes.flatMap(
+          (recipe) =>
+            Array.isArray(recipe[filterType])
+              ? recipe[filterType] // if value is an array
+              : [recipe[filterType]] // if value is a single string
+        )
       )
-    )
-  );
-
-  // Update the filter value and notify the parent (Recipes.jsx) of the change
-  useEffect(() => {
-    onFilterChange(filterType, filterValue, searchQuery);
-  }, [filterType, filterValue, searchQuery, onFilterChange]);
+    );
+  }, [recipes, filterType]);
 
   return (
     <div className={styles.filter}>
-      <div className={styles.search}>
-        <input
-          type="text"
-          placeholder="Search by recipe name..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className={styles.searchInput}
-        />
-      </div>
       <div className={styles.dropDown}>
-        {/* Dropdown to select filter type */}
         <select
-          onChange={(e) => setFilterType(e.target.value)}
+          onChange={(e) => onFilterTypeChange(e.target.value)}
           value={filterType}
         >
-          <option value="mealType">Meal Type</option>
-          <option value="cuisine">Cuisine</option>
+          <option value="mealType">Måltidstype</option>
+          <option value="cuisine">Køkken</option>
         </select>
-
-        {/* Dropdown to select filter value */}
         <select
-          onChange={(e) => setFilterValue(e.target.value)}
+          onChange={(e) => onFilterValueChange(e.target.value)}
           value={filterValue}
         >
-          <option value="">All</option>
+          <option value="">Alle</option>
           {filterOptions.map((option, index) => (
             <option key={index} value={option}>
               {option}

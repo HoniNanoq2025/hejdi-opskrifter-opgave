@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Recipes.module.css";
-import Filter from "../Filter/Filter"; // Import the Filter component
+import Filter from "../Filter/Filter";
+import Search from "../Search/Search";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState([]);
-  const [filteredRecipes, setFilteredRecipes] = useState([]); // Store filtered recipes
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [likedRecipes, setLikedRecipes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  // Add state for filter values
+  const [filterType, setFilterType] = useState("mealType");
+  const [filterValue, setFilterValue] = useState("");
   const navigate = useNavigate();
 
   // Fetch recipes from the API
@@ -53,6 +58,37 @@ export default function Recipes() {
     }
   }, [likedRecipes]);
 
+  // Apply filters whenever recipes, searchTerm, filterType, or filterValue changes
+  useEffect(() => {
+    if (recipes.length === 0) return; // Don't filter if recipes aren't loaded yet
+
+    let filtered = [...recipes];
+
+    // Filter by selected filter type and value
+    if (filterValue) {
+      filtered = filtered.filter((recipe) => {
+        const recipeFilterValues = Array.isArray(recipe[filterType])
+          ? recipe[filterType]
+          : [recipe[filterType]];
+
+        return recipeFilterValues.some(
+          (value) =>
+            typeof value === "string" &&
+            value.toLowerCase().includes(filterValue.toLowerCase())
+        );
+      });
+    }
+
+    // Apply search term filter
+    if (searchTerm) {
+      filtered = filtered.filter((recipe) =>
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredRecipes(filtered);
+  }, [recipes, searchTerm, filterType, filterValue]);
+
   const toggleLike = (recipeId) => {
     if (likedRecipes.includes(recipeId)) {
       setLikedRecipes(likedRecipes.filter((id) => id !== recipeId));
@@ -65,41 +101,27 @@ export default function Recipes() {
     return likedRecipes.includes(recipeId);
   };
 
-  // Handle filter changes from the Filter component
-  const handleFilterChange = (filterType, filterValue, searchQuery = "") => {
-    let filtered = recipes;
+  // These functions update the filter state but don't directly filter recipes
+  const handleFilterTypeChange = (newFilterType) => {
+    setFilterType(newFilterType);
+  };
 
-    // Apply dropdown filter (mealType or cuisine)
-    if (filterValue) {
-      filtered = filtered.filter((recipe) => {
-        const recipeFilterValues = Array.isArray(recipe[filterType])
-          ? recipe[filterType]
-          : [recipe[filterType]];
-
-        return recipeFilterValues.some((value) => {
-          if (typeof value === "string") {
-            return value.toLowerCase().includes(filterValue.toLowerCase());
-          }
-          return false;
-        });
-      });
-    }
-
-    // Apply search filter (recipe name)
-    if (searchQuery.trim() !== "") {
-      filtered = filtered.filter((recipe) =>
-        recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Always update the filteredRecipes (to avoid stale results)
-    setFilteredRecipes(filtered);
+  const handleFilterValueChange = (newFilterValue) => {
+    setFilterValue(newFilterValue);
   };
 
   return (
     <div>
-      {/* Render the Filter component */}
-      <Filter recipes={recipes} onFilterChange={handleFilterChange} />
+      <Search setSearchTerm={setSearchTerm} />
+
+      {/* Updated Filter component props */}
+      <Filter
+        recipes={recipes}
+        filterType={filterType}
+        filterValue={filterValue}
+        onFilterTypeChange={handleFilterTypeChange}
+        onFilterValueChange={handleFilterValueChange}
+      />
 
       <div className={styles.cardContainer}>
         {/* Render filtered recipes */}
