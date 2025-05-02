@@ -4,6 +4,7 @@ import styles from "./Filter.module.css";
 function Filter({ recipes, onFilterChange }) {
   const [filterType, setFilterType] = useState("mealType"); // Default filter type
   const [filterValue, setFilterValue] = useState(""); // Default filter value
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Get unique filter values (mealType or cuisine)
   const filterOptions = Array.from(
@@ -18,11 +19,20 @@ function Filter({ recipes, onFilterChange }) {
 
   // Update the filter value and notify the parent (Recipes.jsx) of the change
   useEffect(() => {
-    onFilterChange(filterType, filterValue);
-  }, [filterType, filterValue, onFilterChange]);
+    onFilterChange(filterType, filterValue, searchQuery);
+  }, [filterType, filterValue, searchQuery, onFilterChange]);
 
   return (
     <div className={styles.filter}>
+      <div className={styles.search}>
+        <input
+          type="text"
+          placeholder="Search by recipe name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+      </div>
       <div className={styles.dropDown}>
         {/* Dropdown to select filter type */}
         <select

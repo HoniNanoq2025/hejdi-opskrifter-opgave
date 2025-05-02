@@ -66,34 +66,34 @@ export default function Recipes() {
   };
 
   // Handle filter changes from the Filter component
-  const handleFilterChange = (filterType, filterValue) => {
-    if (filterValue) {
-      // Filter recipes where mealType or cuisine contains the selected filterValue
-      const filtered = recipes.filter((recipe) => {
-        // Get the filter values for this recipe (could be an array or a string)
-        const recipeFilterValues = Array.isArray(recipe[filterType])
-          ? recipe[filterType] // If it's an array, use it as-is
-          : [recipe[filterType]]; // If it's a single value, make it an array
+  const handleFilterChange = (filterType, filterValue, searchQuery = "") => {
+    let filtered = recipes;
 
-        // Check if any value in the array matches the filter value (case-insensitive)
+    // Apply dropdown filter (mealType or cuisine)
+    if (filterValue) {
+      filtered = filtered.filter((recipe) => {
+        const recipeFilterValues = Array.isArray(recipe[filterType])
+          ? recipe[filterType]
+          : [recipe[filterType]];
+
         return recipeFilterValues.some((value) => {
           if (typeof value === "string") {
             return value.toLowerCase().includes(filterValue.toLowerCase());
           }
-          return false; // In case it's not a string, we skip it.
+          return false;
         });
       });
-
-      // Only update filteredRecipes if there's a change in the results
-      if (filtered.length !== filteredRecipes.length) {
-        setFilteredRecipes(filtered);
-      }
-    } else {
-      // If no filter is selected, show all recipes
-      if (recipes.length !== filteredRecipes.length) {
-        setFilteredRecipes(recipes);
-      }
     }
+
+    // Apply search filter (recipe name)
+    if (searchQuery.trim() !== "") {
+      filtered = filtered.filter((recipe) =>
+        recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Always update the filteredRecipes (to avoid stale results)
+    setFilteredRecipes(filtered);
   };
 
   return (
