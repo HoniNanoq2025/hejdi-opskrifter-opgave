@@ -77,7 +77,17 @@ export default function RecipeDetail() {
         </div>
         <div className={styles.prep}>
           <h4>Fremgangsmåde</h4>
-          <p>{recipe.instructions}</p>
+          <p>
+            {Array.isArray(recipe.instructions) ? (
+              <ul>
+                {recipe.instructions.map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>{recipe.instructions}</p>
+            )}
+          </p>
         </div>
       </div>
     </div>
