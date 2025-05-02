@@ -47,15 +47,19 @@
 }
 
 .time > h5 {
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .info > h5 {
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .calories > h5 {
-  font-weight: 300;
+  font-weight: 500;
+}
+
+bold {
+  font-weight: 800;
 }
 
 ul {

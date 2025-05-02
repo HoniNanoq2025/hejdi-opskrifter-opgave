@@ -33,7 +33,7 @@ export default function RecipeDetail() {
       <div className={styles.center}>
         <div className={styles.details}>
           <div className={styles.time}>
-            <h5>Servings: {recipe.servings} pers.</h5>
+            <h5><bold>Servings: </bold>{recipe.servings} pers.</h5>
             <h5>Preparation time: {recipe.prepTimeMinutes} min.</h5>
             <h5>Cooking time: {recipe.cookTimeMinutes} min.</h5>
           </div>
