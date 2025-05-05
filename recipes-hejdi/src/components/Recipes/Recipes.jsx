@@ -6,25 +6,37 @@ import Search from "../Search/Search";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import SortRating from "../SortRating/SortRating";
 
+/**
+ * Hovedkomponent der viser en liste over opskrifter med mulighed for søgning, filtrering og sortering
+ * @returns {JSX.Element} - Renderer hele opskriftssiden
+ */
 export default function Recipes() {
+  // State til at gemme alle opskrifter fra API'en
   const [recipes, setRecipes] = useState([]);
+  // State til at gemme filtrerede opskrifter der vises på siden
   const [filteredRecipes, setFilteredRecipes] = useState([]);
+  // State til at gemme ID'er på opskrifter som brugeren har liket
   const [likedRecipes, setLikedRecipes] = useState([]);
+  // State til at gemme det nuværende søgeord
   const [searchTerm, setSearchTerm] = useState("");
-  // Add state for filter values
-  const [filterType, setFilterType] = useState("mealType");
-  const [filterValue, setFilterValue] = useState("");
-  const [sortDirection, setSortDirection] = useState(""); // "" for at vise uden sortering
+  // State til filtrering
+  const [filterType, setFilterType] = useState("mealType"); // Standardfilter er måltidstype
+  const [filterValue, setFilterValue] = useState(""); // Tom filterværdi betyder "vis alle"
+  // State til sortering efter vurdering ("" = ingen sortering, "asc" = lav til høj, "desc" = høj til lav)
+  const [sortDirection, setSortDirection] = useState("");
+  // Hook til at navigere mellem sider
   const navigate = useNavigate();
 
-  // Fetch recipes from the API
+  /**
+   * Henter opskrifter fra API'en når komponenten indlæses
+   */
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
         const response = await fetch("https://dummyjson.com/recipes");
         const data = await response.json();
         setRecipes(data.recipes);
-        setFilteredRecipes(data.recipes); // Initially show all recipes
+        setFilteredRecipes(data.recipes); // Vis alle opskrifter til at starte med
       } catch (error) {
         console.error("Fejl ved hentning af opskrifter", error);
       }
@@ -33,7 +45,9 @@ export default function Recipes() {
     fetchRecipes();
   }, []);
 
-  // Handle liking/unliking recipes
+  /**
+   * Indlæser gemte "likes" fra lokallagring (localStorage) når komponenten indlæses
+   */
   useEffect(() => {
     try {
       const storedLikes = localStorage.getItem("likedRecipes");
@@ -45,6 +59,9 @@ export default function Recipes() {
     }
   }, []);
 
+  /**
+   * Gemmer "likes" i lokallagring (localStorage) når de ændres
+   */
   useEffect(() => {
     try {
       if (likedRecipes.length > 0) {
@@ -60,15 +77,18 @@ export default function Recipes() {
     }
   }, [likedRecipes]);
 
-  // Apply filters whenever recipes, searchTerm, filterType, or filterValue changes
+  /**
+   * Anvender filtre og sortering på opskrifterne når nogen af filter-parametrene ændres
+   */
   useEffect(() => {
-    if (recipes.length === 0) return; // Don't filter if recipes aren't loaded yet
+    if (recipes.length === 0) return; // Filtrer ikke hvis opskrifterne ikke er indlæst endnu
 
     let filtered = [...recipes];
 
-    // Filter by selected filter type and value
+    // Filtrer efter den valgte filtertype og værdi
     if (filterValue) {
       filtered = filtered.filter((recipe) => {
+        // Håndterer både tilfælde hvor filterværdien er et array eller en enkelt værdi
         const recipeFilterValues = Array.isArray(recipe[filterType])
           ? recipe[filterType]
           : [recipe[filterType]];
@@ -81,14 +101,14 @@ export default function Recipes() {
       });
     }
 
-    // Søgefilter
+    // Anvend søgefilter hvis der er et søgeord
     if (searchTerm) {
       filtered = filtered.filter((recipe) =>
         recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    //Sorterings filter
+    // Anvend sortering efter vurdering hvis der er valgt en sorteringsretning
     if (sortDirection) {
       filtered.sort((a, b) => {
         if (sortDirection === "asc") {
@@ -102,6 +122,10 @@ export default function Recipes() {
     setFilteredRecipes(filtered);
   }, [recipes, searchTerm, filterType, filterValue, sortDirection]);
 
+  /**
+   * Skifter mellem at like og unlike en opskrift
+   * @param {number} recipeId - ID på den opskrift der skal likes/unlikes
+   */
   const toggleLike = (recipeId) => {
     if (likedRecipes.includes(recipeId)) {
       setLikedRecipes(likedRecipes.filter((id) => id !== recipeId));
@@ -110,19 +134,35 @@ export default function Recipes() {
     }
   };
 
+  /**
+   * Tjekker om en opskrift er liket
+   * @param {number} recipeId - ID på den opskrift der skal tjekkes
+   * @returns {boolean} - True hvis opskriften er liket, ellers false
+   */
   const isLiked = (recipeId) => {
     return likedRecipes.includes(recipeId);
   };
 
-  // These functions update the filter state but don't directly filter recipes
+  /**
+   * Opdaterer filtertypen (måltidstype eller køkken)
+   * @param {string} newFilterType - Den nye filtertype
+   */
   const handleFilterTypeChange = (newFilterType) => {
     setFilterType(newFilterType);
   };
 
+  /**
+   * Opdaterer filterværdien (specifik måltidstype eller køkken)
+   * @param {string} newFilterValue - Den nye filterværdi
+   */
   const handleFilterValueChange = (newFilterValue) => {
     setFilterValue(newFilterValue);
   };
 
+  /**
+   * Opdaterer sorteringsretningen
+   * @param {string} direction - Den nye sorteringsretning ("asc", "desc" eller "")
+   */
   const handleSortChange = (direction) => {
     setSortDirection(direction);
   };
@@ -134,7 +174,7 @@ export default function Recipes() {
       </div>
 
       <div className={styles.filtering}>
-        {/* Updated Filter component props */}
+        {/* Filter-komponenten med props til filtrering */}
         <div className={styles.filter}>
           <Filter
             recipes={recipes}
@@ -146,7 +186,7 @@ export default function Recipes() {
         </div>
 
         <div className={styles.sorting}>
-          {/* Add the sort button component */}
+          {/* Sorteringsknap-komponenten */}
           <SortRating
             sortDirection={sortDirection}
             onSortChange={handleSortChange}
@@ -154,7 +194,7 @@ export default function Recipes() {
         </div>
       </div>
       <div className={styles.cardContainer}>
-        {/* Render filtered recipes */}
+        {/* Render filtrerede opskrifter som kort */}
         {filteredRecipes.map((recipe) => (
           <div className={styles.item} key={recipe.id}>
             <div className={styles.card}>
